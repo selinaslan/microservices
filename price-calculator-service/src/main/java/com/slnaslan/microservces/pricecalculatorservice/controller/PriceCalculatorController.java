@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,7 @@ public class PriceCalculatorController {
 	
 	@Autowired
 	private ItemPriceServiceProxy proxy;
-	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 //	@GetMapping("price-calculator/item/{item}/quantity/{quantity}")
 //	public PriceCalculatorBean calculateTotalAmount(@PathVariable String item,@PathVariable BigDecimal quantity) {
 //		
@@ -37,7 +39,7 @@ public class PriceCalculatorController {
 	public PriceCalculatorBean calculateTotalAmountFeign (@PathVariable String item,@PathVariable BigDecimal quantity) {
 		
 		PriceCalculatorBean response = proxy.retrieveItemPrice(item);
-		
+		logger.info("{}",response);
 		return new PriceCalculatorBean(response.getId(),item,response.getPrice(),quantity,quantity.multiply(response.getPrice()),response.getPort());
 	}
 	
